@@ -228,6 +228,62 @@ class Deque_Link {
 	
 }
 
+/*
+ * Priority Queue implementation based on array:
+ * 
+ * Insertion takes O(N) time
+ * Deletion takes O(1) time,
+ * Inefficient compared to heap based implementation
+ * 
+ */
+
+class Priority_Queue {
+	// Array holding priority queue
+	private int[] arr;
+	// Size of the array
+	private int size;
+	// Current index of the array
+	private int cur_index;
+	// Constructor
+	public Priority_Queue(int size) {
+		this.size = size;
+		arr = new int[size];
+		cur_index = 0;
+	}
+	// Sorted insertion, sorted in ascending order
+	public void insertion(int val) {
+		if(isFull()) return;
+		else if(isEmpty()) arr[cur_index++] = val;
+		else {
+			int i =cur_index-1;
+			for(i=cur_index-1;i>=0;i--) {
+				if(arr[i]>val) {
+					arr[i+1] = arr[i];
+				}
+				else {
+					break;
+				}
+			}
+			arr[i+1] = val;
+			cur_index++;
+		}
+	}
+	
+	// Deletes the highest element in the array
+	public int deletion() {
+		if(isEmpty()) return -1;
+		return arr[cur_index--];
+	}
+	
+	// Checks if the array is full
+	public boolean isFull() {
+		return cur_index == size;
+	}
+	// Checks if the array is empty
+	public boolean isEmpty() {
+		return cur_index==0;
+	}
+}
 
 
 // Main Class for Testing all other classes
