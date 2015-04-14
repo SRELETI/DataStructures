@@ -34,3 +34,12 @@
   31. pairwise swap of elements in list by changing links
   32. Remove middle points in a linked list of line segments
   33. maximum sum out of two sorted lists having some common nodes.
+  
+*Implementation of Queue*
+
+  1. Queue Implementation based on Array(Circular Array)
+  2. Queue Implementation based on LinkedList
+  3. Deque Implementation based on Array
+  4. Deque Implementation based on LinkedList
+  5. Priority Queue Implementation based on Array
+  
