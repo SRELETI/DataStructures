@@ -1,4 +1,4 @@
-# LinkedListAllFunctions
+# Overview
 *Implementation of all important functions of LinkedList*
 
   1. Adding a node to the List (Begining, End, After a node)
