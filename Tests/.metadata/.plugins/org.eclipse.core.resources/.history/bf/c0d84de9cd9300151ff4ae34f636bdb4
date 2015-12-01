@@ -1,0 +1,60 @@
+
+public class ZenefitsCodeSprint {
+
+	public static void main(String args[]) {
+	//	System.out.println(candyShop(5,new int[]{1,2,4,5}));
+		System.out.println(encryptionModule("abd","pqr"));
+	}
+	
+	// 1st problem: Find the number of ways in which given coins can be summed
+	// to get sum as 'n' 
+	public static int candyShop(int n,int[] coins) {
+		int[] sum = new int[n+1];
+		sum[0] = 1;
+		for(int i=0;i<coins.length;i++) {
+			for(int j=coins[i];j<=n;j++) {
+				sum[j] += sum[j-coins[i]];
+			}
+		}
+		return sum[n];
+	}
+	
+	// 2nd problem: CaesarCipher problem, Given two String P and E`.
+	// P - is original string, E- is string encrypted using caesar cipher using unknown shift.
+	// E` is scrambled string of E. By scrambled, some of the characters are replaced. 
+	// You have to find the min number of mismatches between E and E'. Try different shifts and see.
+	// Example: P - abd,  E' - pqr, E in this case with min mismatches will be pqs and min mismatches = 1
+	public static int encryptionModule(String P, String E) {
+		int total_dif = Integer.MAX_VALUE;
+		for(int i=0;i<26;i++) {
+			String E_org = caesarCipher(P,i);
+			if(E_org.equals(E))
+				return 0;
+			int dif = findDiffs(E_org,E);
+			total_dif = Math.min(total_dif, dif);
+		}
+		return total_dif;
+	}
+	
+	private static int findDiffs(String org, String scram) {
+		int dif = 0;
+		for(int i=0;i<org.length();i++) {
+			if(org.charAt(i) != scram.charAt(i))
+				dif++;
+		}
+		return dif;
+	}
+	
+	private static String caesarCipher(String p, int shift) {
+		StringBuilder sb = new StringBuilder("");
+		for(int i=0;i<p.length();i++) {
+			if(p.charAt(i)+shift > 'z') {
+				sb.append('a'+((p.charAt(i)+shift)-('z')));
+			}
+			else 
+				sb.append(p.charAt(i)+shift);
+		}
+		return sb.toString();
+	}
+	
+}

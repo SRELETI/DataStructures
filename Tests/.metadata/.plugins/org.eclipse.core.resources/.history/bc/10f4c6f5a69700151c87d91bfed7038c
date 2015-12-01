@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Test2 {
+
+	public static void main(String args[]) {
+		int[][] arr = {
+	            { 10, 160, 200, 500, 500, },
+	            { 4, 150, 160, 170, 500, },
+	            { 2, 160, 200, 202, 203, },
+	            { 3, 150, 155, 160, 300 },
+	            { 3, 150, 155, 160, 301 } };
+	//	printCommon(arr);
+		System.out.println(power(2,3));
+		System.out.println(power_it(2,3));
+	}
+	
+	
+	/*
+	 * Common elements in n sorted arrays
+	 */
+	
+	public static void printCommon(int[][] arr) {
+		if(arr == null || arr.length == 0) return;
+		int n = arr.length;
+		int[] x = new int[n];
+		
+		for(;x[0]<n;x[0]++) {
+			int val = arr[0][x[0]];
+			boolean print = true;
+			for(int i=1;i<n;i++) {
+				while(arr[i][x[i]]<val && x[i]<n-1) x[i]++;
+				if(arr[i][x[i]] != val) print = false;
+			}
+			if(print)
+				System.out.println(val);
+		}
+	}
+	
+	
+	/*
+	 * Power function
+	 */
+	public static int power(int a, int n) {
+		if(n == 0) return 1;
+		int p = power(a,n/2);
+		if((n & 1) == 0) 
+			return p*p;
+		else {
+			if(n<0)
+				return ((p)*(p))*(1/a);
+			else
+				return p*p*a;
+		}
+	}
+	
+	/*
+	 * Power Function Iterative
+	 */
+	public static int power_it(int a, int n) {
+		int result = 1;
+		while(n != 0) {
+			if((n&1) !=0) {
+				if(n>0)
+					result *= a;
+				else
+					result *= (1/a);
+			}
+			n = n/2;
+			a = a*a;
+		}
+		return result;
+	}
+	
+}

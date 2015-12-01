@@ -1,0 +1,151 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Test2 {
+
+	public static void main(String args[]) {
+		int[][] arr = {
+	            { 10, 160, 200, 500, 500, },
+	            { 4, 150, 160, 170, 500, },
+	            { 2, 160, 200, 202, 203, },
+	            { 3, 150, 155, 160, 300 },
+	            { 3, 150, 155, 160, 301 } };
+	//	printCommon(arr);
+	//	System.out.println(power(2,-3));
+	//	System.out.println(power_it(2,-3));
+	//	printComb("abc");
+		nextHighestNum(new StringBuilder("7465"));
+	}
+	
+	
+	/*
+	 * Common elements in n sorted arrays
+	 */
+	
+	public static void printCommon(int[][] arr) {
+		if(arr == null || arr.length == 0) return;
+		int n = arr.length;
+		int[] x = new int[n];
+		
+		for(;x[0]<n;x[0]++) {
+			int val = arr[0][x[0]];
+			boolean print = true;
+			for(int i=1;i<n;i++) {
+				while(arr[i][x[i]]<val && x[i]<n-1) x[i]++;
+				if(arr[i][x[i]] != val) print = false;
+			}
+			if(print)
+				System.out.println(val);
+		}
+	}
+	
+	
+	/*
+	 * Power function
+	 */
+	public static double power(int a, int n) {
+		if(n == 0) return 1;
+		double p = power(a,n/2);
+		if((n & 1) == 0) 
+			return p*p;
+		else {
+			if(n<0)
+				return ((p)*(p))*(1/a);
+			else
+				return p*p*a;
+		}
+	}
+	
+	/*
+	 * Power Function Iterative
+	 */
+	public static double power_it(int a, int n) {
+		double result = 1;
+		while(n != 0) {
+			if((n&1) !=0) {
+				if(n>0)
+					result *= a;
+				else
+					result *= (1/a);
+			}
+			n = n/2;
+			a = a*a;
+		}
+		return result;
+	}
+	
+	/*
+	 * Print all combinations of a string
+	 */
+	public static void printComb(String word) {
+		printCombUtils(word,new StringBuilder(""));
+	}
+	
+	private static void printCombUtils(String word, StringBuilder res) {
+		if(word == null || word.length() == 0) return;
+		for(int i=0;i<word.length();i++) {
+			res = res.append(word.charAt(i));
+			System.out.println(res);
+			printCombUtils(word.substring(i+1),res);
+			res.deleteCharAt(res.length()-1);
+		}
+	}
+	
+	/*
+	 * Next highest number with same set of digits
+	 */
+	public static void nextHighestNum(StringBuilder num) {
+		if(num == null) return;
+		int smallIndex = getSmallIndex(num);
+		if(smallIndex == -1) {
+			System.out.println("No greater number possible");
+			return;
+		}
+		int nextHigh = smallIndex+1;
+		int i = nextHigh+1;
+		while(i < num.length()) {
+			if(num.charAt(smallIndex)-'0'<num.charAt(i)-'0' && num.charAt(i)-'0'<num.charAt(nextHigh)-'0') {
+				nextHigh = i;
+			}
+			i++;
+ 		}
+		swap(num,smallIndex,nextHigh);
+		reverse(num,smallIndex+1,num.length()-1);
+		System.out.println(num.toString());
+	}
+	/*
+	 * Reverse utility function
+	 */
+	private static void reverse(StringBuilder db, int start, int end) {
+		while(start<end) {
+			char temp = db.charAt(start);
+			db.setCharAt(start, db.charAt(end));
+			db.setCharAt(end, temp);
+			start++;
+			end--;
+		}
+	}
+	
+	/*
+	 * Swap utility function
+	 */
+	private static void swap(StringBuilder sb, int start, int nextHigh) {
+		char temp = sb.charAt(start);
+		sb.setCharAt(start, sb.charAt(nextHigh));
+		sb.setCharAt(nextHigh, temp);
+	}
+	
+	/*
+	 * Utility function to get the index which is having value smaller than
+	 * value on the index right of it.
+	 */
+	private static int getSmallIndex(StringBuilder num) {
+		int i = num.length()-1;
+		while(i>0) {
+			if(num.charAt(i-1)-'0'<num.charAt(i)-'0')
+				return i-1;
+			i--;
+		}
+		return -1;
+	}
+}

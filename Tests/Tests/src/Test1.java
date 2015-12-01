@@ -1,7 +1,12 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
+import java.util.TreeMap;
 
 public class Test1 {
 
@@ -12,7 +17,25 @@ public class Test1 {
 	 * System.out.println(minCoins(sum,coins));
 	 */
 //	System.out.println(kmpSubString("test","thisisatesttext"));
-	System.out.println(longestSubString("()(()))))"));
+//	System.out.println(longestSubString("()(()))))"));
+	//	System.out.println(longestValidString("()(()))))"));
+		
+		TreeNode root  = new TreeNode(15);
+		root.left = new TreeNode(10);
+		root.right = new TreeNode(20);
+		root.left.left = new TreeNode(8);
+		root.left.right = new TreeNode(12);
+		root.right.left = new TreeNode(16);
+		root.right.right = new TreeNode(25);
+	//	root.left.right.left = new TreeNode(10);
+	//	root.left.right.right = new TreeNode(14);
+		
+	//	bottomView(root);
+	//	int[] arr = {3,1,5,9,12};
+	//	System.out.println(findPartition(arr));
+	//	System.out.println(findParDP(arr));
+		
+		System.out.println(isPairPresent(root,33));
 	}
 	
 	/*
@@ -174,4 +197,200 @@ public class Test1 {
 		return -1;
 	}
 	
+	/*
+	 * input: ((()
+	 * Output: 2
+	 * 
+	 * input: )()())
+	 * Output: 4
+	 */
+	public static int longestValidString(String input) {
+		if(input == null || input.length() == 0) return 0;
+		Stack<Integer> stack = new Stack<Integer>();
+		stack.push(-1);
+		int max = 0;
+		for(int i=0;i<input.length();i++) {
+			if(input.charAt(i)=='(')
+				stack.push(i);
+			else {
+				stack.pop();
+				if(!stack.isEmpty()) {
+					max = Math.max(max, i-stack.peek());
+				}
+				else 
+					stack.push(i);
+			}
+		}
+		return max;
+	}
+	 
+	
+	/*
+	 * Bottom View of a Binary Tree
+	 * 
+	 *             20
+	 *           /    \
+	 *          8      22
+	 *        /   \   /   \
+	 *      5      3 4     25
+	 *           /  \
+	 *         10    14
+	 *     
+	 *     Bottom View: 5, 10,4,14,25
+	 */
+	
+	public static void bottomView(TreeNode root) {
+		if(root == null) return;
+		Queue<TreeNode> queue = new LinkedList<TreeNode>();
+		queue.add(root);
+		Map<Integer,Integer> map = new TreeMap<Integer,Integer>();
+		
+		while(!queue.isEmpty()) {
+			root = queue.remove();
+			map.put(root.hd, root.data);
+			if(root.left != null) {
+				root.left.hd = root.hd-1;
+				queue.add(root.left);
+			}
+			if(root.right != null) {
+				root.right.hd = root.hd+1;
+				queue.add(root.right);
+			}
+		}
+		Iterator<Integer> it = map.keySet().iterator();
+		while(it.hasNext()) {
+			int key = it.next();
+			System.out.println(key+" : "+map.get(key));
+		}
+	}
+	
+	
+	/*
+	 * Partition Set Problem:
+	 * Check if there are two subsets with same sum. 
+	 * Recursive approach: Exponential time complexity
+	 */
+	public static boolean findPartition(int[] arr) {
+		if(arr == null || arr.length == 0) return true;
+		int sum = 0;
+		for(int element:arr) 
+			sum += element;
+		if((sum&1) != 0)
+			return false;
+		return findParUtils(arr,arr.length,sum/2);
+	}
+	
+	private static boolean findParUtils(int[] arr, int n, int sum) {
+		if(sum == 0) return true;
+		if(n == 0 && sum != 0) return false;
+		if(arr[n-1]>sum)
+			return findParUtils(arr,n-1,sum);
+		return findParUtils(arr,n-1,sum) || findParUtils(arr,n-1,sum-arr[n-1]);
+	}
+	
+	/*
+	 * DP approach for Partition Set Problem.
+	 * O(n*sum)
+	 */
+	
+	private static boolean findParDP(int[] arr) {
+		if(arr == null || arr.length == 0) return true;
+		int sum = 0;
+		for(int ele:arr)
+			sum += ele;
+		if((sum&1) == 1)
+			return false;
+		boolean[][] sumArr = new boolean[(sum/2)+1][arr.length+1];
+		for(int i=0;i<arr.length+1;i++)
+			sumArr[0][i] = true;
+		for(int i=1;i<=sum/2;i++) 
+			sumArr[i][0] = false;
+		for(int i=1;i<=sum/2;i++) {
+			for(int j=1;j<=arr.length;j++) {
+				sumArr[i][j] = sumArr[i][j-1];
+				if(i>=arr[j-1]) {
+					sumArr[i][j] = sumArr[i][j] || sumArr[i-arr[j-1]][j-1];
+				}
+			}
+		}
+		return sumArr[sum/2][arr.length];
+	}
+	
+	/*
+	 * Find a pair in BST which sums up to a given number. 
+	 * 
+	 */
+	public static boolean isPairPresent(TreeNode root, int target) {
+		if(root == null) return false;
+		Stack<TreeNode> stack1 = new Stack<TreeNode>();
+		Stack<TreeNode> stack2 = new Stack<TreeNode>();
+		
+		boolean done1 = false;
+		boolean done2 = false;
+		
+		TreeNode cur1 = root;
+		TreeNode cur2 = root;
+		int val1 = 0; int val2 = 0;
+		while(true) {
+			while(!done1) {
+				if(cur1 != null) {
+					stack1.push(cur1);
+					cur1 = cur1.left;
+				}
+				else {
+					if(stack1.isEmpty())
+						done1 = true;
+					else {
+						cur1 = stack1.pop();
+						val1 = cur1.data;
+						cur1 = cur1.right;
+						done1 = true;
+					}
+				}
+			}
+			
+			while(!done2) {
+				if(cur2 != null) {
+					stack2.push(cur2);
+					cur2 = cur2.right;
+				}
+				else {
+					if(stack2.isEmpty()) 
+						done2 = true;
+					else {
+						cur2 = stack2.pop();
+						val2 = cur2.data;
+						cur2 = cur2.left;
+						done2 = true;
+					}
+				}
+			}
+			
+			if(val1 != val2 && val1 + val2 == target) {
+				System.out.println(val1+"+"+val2+"="+target);
+				return true;
+			}
+			else if(val1+val2<target)
+				done1 = false;
+			else if(val1+val2>target)
+				done2 = false;
+			if(val1 >= val2)
+				return false;
+		}
+	}
+	
+}
+
+class TreeNode {
+	public int data;
+	public TreeNode left;
+	public TreeNode right;
+	public int hd;
+	
+	public TreeNode(int val) {
+		data = val;
+		hd =0;
+		left = null;
+		right = null;
+	}
 }

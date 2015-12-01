@@ -1,0 +1,22 @@
+
+public class ZenefitsCodeSprint {
+
+	public static void main(String args[]) {
+		System.out.println(candyShop(5,new int[]{1,2,4,5}));
+	}
+	
+	// 1st problem: Find the number of ways in which given coins can be summed
+	// to get sum as 'n' 
+	public static int candyShop(int n,int[] coins) {
+		int[] sum = new int[n+1];
+		sum[0] = 1;
+		for(int i=0;i<coins.length;i++) {
+			for(int j=coins[i];j<=n;j++) {
+				sum[j] += sum[j-coins[i]];
+			}
+		}
+		return sum[n];
+	}
+	
+	
+}
