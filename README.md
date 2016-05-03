@@ -43,3 +43,8 @@
   4. Deque Implementation based on LinkedList
   5. Priority Queue Implementation based on Array
   
+## Contact
+
+[![Sudeep Reddy Eleti](https://s.gravatar.com/avatar/a48e3b49c8c1dbe4b1d5128493ee6fa3?s=80)](https://github.com/SRELETI)
+
+[Sudeep Reddy Eleti](https://github.com/SRELETI)
